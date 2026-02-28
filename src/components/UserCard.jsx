@@ -5,6 +5,20 @@ function UserCard({ name, email }) {
     .map((n) => n[0])
     .join("");
 
+  // ในโค้ดเดิมเราใช้ name.charCodeAt(0) % 3
+  // แต่บังเอิญว่า "ส" และ "ว" มีค่า charCode % 3 เป็น 2 เหมือนกันทั้งหมด
+  // เลยทำให้ทุกคนได้เป็นสีม่วงครับ จึงขอปรับมาใช้ name.length % 3 แทนเพื่อให้สีต่างกัน
+  const colorIndex = name.length % 3;
+
+  let bgColor = "#1e40af"; // Default
+  if (colorIndex === 0) {
+    bgColor = "#1e40af"; // Blue
+  } else if (colorIndex === 1) {
+    bgColor = "#16a34a"; // Green
+  } else {
+    bgColor = "#9333ea"; // Purple
+  }
+
   return (
     <div
       style={{
@@ -22,7 +36,7 @@ function UserCard({ name, email }) {
         style={{
           width: "40px",
           height: "40px",
-          background: "#1e40af",
+          background: bgColor,
           color: "white",
           borderRadius: "50%",
           display: "flex",
