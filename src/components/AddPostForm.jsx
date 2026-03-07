@@ -3,6 +3,8 @@ import { useState } from "react";
 function AddPostForm({ onAddPost }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const maxTitleLength = 100;
+  const remaining = maxTitleLength - title.length;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -33,16 +35,28 @@ function AddPostForm({ onAddPost }) {
         placeholder="หัวข้อโพสต์"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        maxLength={maxTitleLength}
         style={{
           width: "100%",
           padding: "0.5rem",
-          marginBottom: "0.5rem",
+          marginBottom: "0.25rem",
           border: "1px solid #cbd5e0",
           borderRadius: "4px",
           fontSize: "1rem",
           boxSizing: "border-box",
         }}
       />
+      <div
+        style={{
+          textAlign: "right",
+          fontSize: "0.8rem",
+          marginBottom: "0.5rem",
+          color: remaining < 10 ? "#e53e3e" : "#718096",
+          fontWeight: remaining < 10 ? "bold" : "normal",
+        }}
+      >
+        {title.length}/{maxTitleLength}
+      </div>
 
       <textarea
         placeholder="เนื้อหาโพสต์"

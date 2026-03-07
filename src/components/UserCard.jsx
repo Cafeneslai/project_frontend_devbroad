@@ -1,13 +1,10 @@
 function UserCard({ name, email }) {
-  // ดึงตัวอักษรแรกมาทำ avatar
+
   const initials = name
     .split(" ")
     .map((n) => n[0])
     .join("");
 
-  // ในโค้ดเดิมเราใช้ name.charCodeAt(0) % 3
-  // แต่บังเอิญว่า "ส" และ "ว" มีค่า charCode % 3 เป็น 2 เหมือนกันทั้งหมด
-  // เลยทำให้ทุกคนได้เป็นสีม่วงครับ จึงขอปรับมาใช้ name.length % 3 แทนเพื่อให้สีต่างกัน
   const colorIndex = name.length % 3;
 
   let bgColor = "#1e40af"; // Default

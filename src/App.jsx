@@ -71,7 +71,7 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* คอลัมน์ซ้าย */}
+        {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
           <AddPostForm onAddPost={handleAddPost} />
           <PostList
@@ -81,7 +81,7 @@ function App() {
           />
         </div>
 
-        {/* คอลัมน์ขวา */}
+        {/* คอลัมน์ขวา: สมาชิก */}
         <div>
           <h2
             style={{
