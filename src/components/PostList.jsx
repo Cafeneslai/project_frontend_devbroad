@@ -11,21 +11,23 @@ function PostList({ favorites, onToggleFavorite }) {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = ใหม่สุดก่อน
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-        if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-        const data = await res.json();
-        setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  // แยก fetch logic เป็น function ที่เรียกได้ทั้งจาก useEffect และจากปุ่ม
+  async function fetchPosts() {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
+      const data = await res.json();
+      setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchPosts();
   }, []); // [] = ทำครั้งเดียวตอน component mount
 
@@ -104,6 +106,24 @@ function PostList({ favorites, onToggleFavorite }) {
         }}
       >
         {sortOrder === "desc" ? "⬇️ ใหม่สุดก่อน" : "⬆️ เก่าสุดก่อน"}
+      </button>
+
+      {/* Reload Button */}
+      <button
+        onClick={fetchPosts}
+        style={{
+          background: "#edf2f7",
+          border: "1px solid #cbd5e0",
+          borderRadius: "6px",
+          padding: "0.4rem 0.75rem",
+          cursor: "pointer",
+          fontSize: "0.85rem",
+          color: "#2d3748",
+          marginBottom: "1rem",
+          marginLeft: "0.5rem",
+        }}
+      >
+        🔄 โหลดใหม่
       </button>
 
       {/* ถ้าไม่พบโพสต์ */}
