@@ -10,6 +10,8 @@ function PostList({ favorites, onToggleFavorite }) {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = ใหม่สุดก่อน
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
 
   // แยก fetch logic เป็น function ที่เรียกได้ทั้งจาก useEffect และจากปุ่ม
   async function fetchPosts() {
@@ -39,6 +41,13 @@ function PostList({ favorites, onToggleFavorite }) {
   // Sort โพสต์
   const sorted = [...filtered].sort((a, b) =>
     sortOrder === "desc" ? b.id - a.id : a.id - b.id,
+  );
+
+  // Pagination
+  const totalPages = Math.ceil(sorted.length / postsPerPage);
+  const paginatedPosts = sorted.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage,
   );
 
   if (loading) return <LoadingSpinner />;
@@ -77,7 +86,10 @@ function PostList({ favorites, onToggleFavorite }) {
         type="text"
         placeholder="ค้นหาโพสต์..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setCurrentPage(1); // reset หน้าเมื่อ search เปลี่ยน
+        }}
         style={{
           width: "100%",
           padding: "0.5rem 0.75rem",
@@ -137,7 +149,7 @@ function PostList({ favorites, onToggleFavorite }) {
       {posts.length === 0 && <PostSkeleton />}
 
       {/* แสดงรายการโพสต์ */}
-      {sorted.map((post) => (
+      {paginatedPosts.map((post) => (
         <PostCard
           key={post.id}
           post={post}
@@ -145,6 +157,53 @@ function PostList({ favorites, onToggleFavorite }) {
           onToggleFavorite={() => onToggleFavorite(post.id)}
         />
       ))}
+
+      {/* Pagination Buttons */}
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            marginTop: "1rem",
+          }}
+        >
+          <button
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+            style={{
+              padding: "0.4rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid #cbd5e0",
+              background: currentPage === 1 ? "#edf2f7" : "#1e40af",
+              color: currentPage === 1 ? "#a0aec0" : "white",
+              cursor: currentPage === 1 ? "not-allowed" : "pointer",
+              fontSize: "0.85rem",
+            }}
+          >
+            ◀ ก่อนหน้า
+          </button>
+          <span style={{ color: "#4a5568", fontSize: "0.9rem" }}>
+            หน้า {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPages}
+            style={{
+              padding: "0.4rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid #cbd5e0",
+              background: currentPage === totalPages ? "#edf2f7" : "#1e40af",
+              color: currentPage === totalPages ? "#a0aec0" : "white",
+              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+              fontSize: "0.85rem",
+            }}
+          >
+            ถัดไป ▶
+          </button>
+        </div>
+      )}
     </div>
   );
 }
