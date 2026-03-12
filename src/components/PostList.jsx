@@ -1,37 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PostCard from "./PostCard";
 import PostCount from "./PostCount";
 import PostSkeleton from "./PostSkeleton";
 import LoadingSpinner from "./LoadingSpinner";
+import useFetch from "../hooks/useFetch";
 
 function PostList({ favorites, onToggleFavorite }) {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, loading, error, refetch } = useFetch(
+    "https://jsonplaceholder.typicode.com/posts",
+  );
+  const posts = data ? data.slice(0, 20) : []; // เอาแค่ 20 รายการแรก
+
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = ใหม่สุดก่อน
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
-
-  // แยก fetch logic เป็น function ที่เรียกได้ทั้งจาก useEffect และจากปุ่ม
-  async function fetchPosts() {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-      const data = await res.json();
-      setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts();
-  }, []); // [] = ทำครั้งเดียวตอน component mount
 
   // กรองโพสต์ตาม search
   const filtered = posts.filter((post) =>
@@ -122,7 +105,7 @@ function PostList({ favorites, onToggleFavorite }) {
 
       {/* Reload Button */}
       <button
-        onClick={fetchPosts}
+        onClick={refetch}
         style={{
           background: "#edf2f7",
           border: "1px solid #cbd5e0",
