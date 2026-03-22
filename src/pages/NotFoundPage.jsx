@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+// หน้า 404
 function NotFoundPage() {
   return (
     <div
@@ -14,6 +15,8 @@ function NotFoundPage() {
       <p style={{ fontSize: "1.2rem", color: "#718096", marginBottom: "2rem" }}>
         ไม่พบหน้าที่คุณต้องการ
       </p>
+
+      {/* ลิงก์กลับหน้าหลัก */}
       <Link
         to="/"
         style={{

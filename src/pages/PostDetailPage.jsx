@@ -11,6 +11,7 @@ function PostDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // ดึงข้อมูลโพสต์
     async function fetchPost() {
       const res = await fetch(
         `https://jsonplaceholder.typicode.com/posts/${id}`,
@@ -20,18 +21,22 @@ function PostDetailPage() {
       setLoading(false);
     }
     fetchPost();
-  }, [id]);
+  }, [id]); // ถ้า id เปลี่ยน → useEffect จะทำงานใหม่
 
+  // ถ้ากำลังโหลด → แสดง LoadingSpinner
   if (loading) return <LoadingSpinner />;
 
+  // เช็คว่าโพสต์นี้ถูกใจแล้วหรือยัง
   const isFavorite = favorites.includes(post.id);
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto", padding: "0 1rem" }}>
+      {/* ลิงก์กลับหน้าหลัก */}
       <Link to="/" style={{ color: "#1e40af", textDecoration: "none" }}>
         ← กลับหน้าหลัก
       </Link>
 
+      {/* แสดงรายละเอียดโพสต์ */}
       <div
         style={{
           border: "1px solid #e2e8f0",
@@ -44,6 +49,7 @@ function PostDetailPage() {
         <h2 style={{ margin: "0 0 1rem", color: "#1e40af" }}>{post.title}</h2>
         <p style={{ color: "#4a5568", lineHeight: 1.8 }}>{post.body}</p>
 
+        {/* ปุ่มถูกใจ */}
         <button
           onClick={() => toggleFavorite(post.id)}
           style={{

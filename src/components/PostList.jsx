@@ -6,35 +6,44 @@ import LoadingSpinner from "./LoadingSpinner";
 import useFetch from "../hooks/useFetch";
 
 function PostList() {
+  // ดึงข้อมูลโพสต์จาก API
   const { data, loading, error, refetch } = useFetch(
     "https://jsonplaceholder.typicode.com/posts",
   );
-  const posts = data ? data.slice(0, 20) : []; // เอาแค่ 20 รายการแรก
+  // เอาแค่ 20 รายการแรก
+  const posts = data ? data.slice(0, 20) : [];
 
+  // state สำหรับค้นหา, เรียงลำดับ, และหน้าปัจจุบัน
   const [search, setSearch] = useState("");
-  const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = ใหม่สุดก่อน
+  const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = ใหม่สุดก่อน 'asc' = เก่าสุดก่อน
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
   // กรองโพสต์ตาม search
+  // ใช้ .toLowerCase() เพื่อให้ค้นหาได้ทั้งตัวพิมพ์ใหญ่-เล็ก
   const filtered = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase()),
   );
 
   // Sort โพสต์
+  // ใช้ [...filtered] เพื่อสร้าง array ใหม่ ไม่แก้ไขของเดิม
   const sorted = [...filtered].sort((a, b) =>
     sortOrder === "desc" ? b.id - a.id : a.id - b.id,
   );
 
   // Pagination
+  // Math.ceil() ปัดเศษขึ้น → ให้มีหน้าสุดท้ายเสมอ
+  // .slice() ตัด array ตามช่วงที่ต้องการ
   const totalPages = Math.ceil(sorted.length / postsPerPage);
   const paginatedPosts = sorted.slice(
     (currentPage - 1) * postsPerPage,
     currentPage * postsPerPage,
   );
 
+  // ถ้ากำลังโหลด → แสดง LoadingSpinner
   if (loading) return <LoadingSpinner />;
 
+  // ถ้ามี error → แสดงข้อความ error
   if (error)
     return (
       <div
@@ -50,6 +59,7 @@ function PostList() {
       </div>
     );
 
+  // แสดงผล UI
   return (
     <div>
       <h2
@@ -85,6 +95,7 @@ function PostList() {
       />
 
       {/* Sort Button */}
+      {/* เปลี่ยนลำดับการแสดงผล: ใหม่สุดก่อน / เก่าสุดก่อน */}
       <button
         onClick={() =>
           setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"))
@@ -104,6 +115,7 @@ function PostList() {
       </button>
 
       {/* Reload Button */}
+      {/* เรียก refetch() เพื่อดึงข้อมูลใหม่จาก API */}
       <button
         onClick={refetch}
         style={{
@@ -133,10 +145,7 @@ function PostList() {
 
       {/* แสดงรายการโพสต์ */}
       {paginatedPosts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-        />
+        <PostCard key={post.id} post={post} />
       ))}
 
       {/* Pagination Buttons */}

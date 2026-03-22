@@ -1,10 +1,15 @@
+// custom hook สำหรับดึงข้อมูลจาก API
 import { useState, useEffect, useCallback } from "react";
 
 function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState(null); // ข้อมูลที่ดึงได้
+  const [loading, setLoading] = useState(true); // กำลังโหลด
+  const [error, setError] = useState(null); // error
 
+  // ดึงข้อมูลจาก API
+  // useCallback ใช้ memoize ฟังก์ชัน fetchData
+  // async/await ใช้ async/await เพื่อให้โค้ดดูง่ายขึ้น
+  // finally ใช้ finally เพื่อให้โค้ดดูง่ายขึ้น
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -20,11 +25,12 @@ function useFetch(url) {
     }
   }, [url]);
 
+  // useEffect ใช้ useEffect เพื่อดึงข้อมูลเมื่อ component mount
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return { data, loading, error, refetch: fetchData };
+  return { data, loading, error, refetch: fetchData }; // return ข้อมูลที่ดึงได้, กำลังโหลด, error, refetch
 }
 
 export default useFetch;

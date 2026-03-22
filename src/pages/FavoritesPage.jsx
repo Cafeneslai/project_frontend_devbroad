@@ -2,16 +2,19 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 
+// หน้าแสดงโพสต์ที่ถูกใจ
 function FavoritesPage() {
   const { favorites, toggleFavorite } = useFavorites();
   const [posts, setPosts] = useState([]);
 
+  // ดึงข้อมูลโพสต์ที่ถูกใจ
   useEffect(() => {
     if (favorites.length === 0) return;
 
     // ดึงเฉพาะโพสต์ที่ถูกใจ
     async function fetchFavoritePosts() {
       const results = await Promise.all(
+        // Promise.all ใช้สำหรับดึงข้อมูลหลายๆ อย่างพร้อมกัน
         favorites.map((id) =>
           fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((r) =>
             r.json(),
@@ -21,8 +24,9 @@ function FavoritesPage() {
       setPosts(results);
     }
     fetchFavoritePosts();
-  }, [favorites]);
+  }, [favorites]); // ถ้า favorites เปลี่ยน → useEffect จะทำงานใหม่
 
+  // ถ้ายังไม่มีโพสต์ที่ถูกใจ → แสดงข้อความว่างเปล่า
   if (favorites.length === 0) {
     return (
       <div
@@ -43,6 +47,7 @@ function FavoritesPage() {
     );
   }
 
+  // แสดงรายการโพสต์ที่ถูกใจ
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto", padding: "0 1rem" }}>
       <h2
@@ -54,6 +59,7 @@ function FavoritesPage() {
       >
         ❤️ โพสต์ที่ถูกใจ ({favorites.length})
       </h2>
+      {/* วนลูปแสดงโพสต์แต่ละรายการ */}
       {posts.map((post) => (
         <div
           key={post.id}
@@ -65,6 +71,7 @@ function FavoritesPage() {
             background: "white",
           }}
         >
+          {/* หัวข้อโพสต์ */}
           <h3 style={{ margin: "0 0 0.5rem", color: "#1e40af" }}>
             <Link
               to={`/posts/${post.id}`}
@@ -74,6 +81,8 @@ function FavoritesPage() {
             </Link>
           </h3>
           <p style={{ margin: "0 0 0.75rem", color: "#4a5568" }}>{post.body}</p>
+
+          {/* ปุ่มยกเลิกถูกใจ */}
           <button
             onClick={() => toggleFavorite(post.id)}
             style={{

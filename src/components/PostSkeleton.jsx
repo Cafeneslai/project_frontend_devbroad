@@ -1,6 +1,8 @@
+// แสดง skeleton UI ตอนกำลังโหลดข้อมูล
 function PostSkeleton() {
   return (
     <>
+      {/* สร้าง skeleton 3 อัน */}
       {[1, 2, 3].map((item) => (
         <div
           key={item}
@@ -12,6 +14,7 @@ function PostSkeleton() {
             background: "white",
           }}
         >
+          {/* Skeleton สำหรับหัวข้อโพสต์ */}
           <div
             style={{
               background: "#e2e8f0",
@@ -21,6 +24,7 @@ function PostSkeleton() {
               marginBottom: "1rem",
             }}
           ></div>
+          {/* Skeleton สำหรับเนื้อหาโพสต์ */}
           <div
             style={{
               background: "#e2e8f0",
@@ -30,6 +34,8 @@ function PostSkeleton() {
               marginBottom: "0.5rem",
             }}
           ></div>
+          {/* Skeleton สำหรับเนื้อหาโพสต์ */}
+          {/* แถบสีเทา — จำลองเนื้อหาบรรทัดที่ 2 (width 80%) */}
           <div
             style={{
               background: "#e2e8f0",

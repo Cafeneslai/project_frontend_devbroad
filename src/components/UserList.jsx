@@ -3,10 +3,12 @@ import LoadingSpinner from "./LoadingSpinner";
 import useFetch from "../hooks/useFetch";
 
 function UserList() {
+  // ดึงข้อมูลผู้ใช้จาก API
   const { data: users, loading } = useFetch(
     "https://jsonplaceholder.typicode.com/users",
   );
 
+  // ถ้ากำลังโหลด → แสดง LoadingSpinner
   if (loading) return <LoadingSpinner />;
 
   return (
@@ -20,6 +22,8 @@ function UserList() {
       >
         สมาชิก
       </h2>
+      {/* แสดงรายการผู้ใช้ */}
+      {/* .map() วนลูปแสดง UserCard */}
       {users.map((user) => (
         <UserCard key={user.id} name={user.name} email={user.email} />
       ))}

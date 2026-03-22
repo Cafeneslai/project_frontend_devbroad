@@ -6,13 +6,14 @@ function AddPostForm({ onAddPost }) {
   const maxTitleLength = 100;
   const remaining = maxTitleLength - title.length;
 
+  // ฟังก์ชัน handleSubmit — ทำงานเมื่อกด submit ฟอร์ม
   function handleSubmit(e) {
-    e.preventDefault();
-    if (!title.trim() || !body.trim()) return; // ป้องกันส่งว่าง
+    e.preventDefault(); // ป้องกันรีเฟรชหน้า (default behavior ของ form)
+    if (!title.trim() || !body.trim()) return; // ถ้าหัวข้อหรือเนื้อหาว่าง → ไม่ทำอะไร
 
     onAddPost({ title, body });
-    setTitle(""); // เคลียร์ form
-    setBody("");
+    setTitle(""); // เคลียร์ form หัวข้อ
+    setBody(""); // เคลียร์ form เนื้อหา
   }
 
   return (
@@ -30,6 +31,7 @@ function AddPostForm({ onAddPost }) {
         เพิ่มโพสต์ใหม่
       </h3>
 
+      {/* Input สำหรับหัวข้อโพสต์ — Controlled Input (ค่าผูกกับ state) */}
       <input
         type="text"
         placeholder="หัวข้อโพสต์"
@@ -46,6 +48,7 @@ function AddPostForm({ onAddPost }) {
           boxSizing: "border-box",
         }}
       />
+      {/* ตัวนับจำนวนตัวอักษร — เปลี่ยนสีแดงและตัวหนาเมื่อเหลือน้อยกว่า 10 */}
       <div
         style={{
           textAlign: "right",
@@ -58,6 +61,7 @@ function AddPostForm({ onAddPost }) {
         {title.length}/{maxTitleLength}
       </div>
 
+      {/* Textarea สำหรับเนื้อหาโพสต์ — Controlled Input */}
       <textarea
         placeholder="เนื้อหาโพสต์"
         value={body}
@@ -75,6 +79,7 @@ function AddPostForm({ onAddPost }) {
         }}
       />
 
+      {/* ปุ่ม Submit */}
       <button
         type="submit"
         style={{
