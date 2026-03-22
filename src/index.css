@@ -22,10 +22,11 @@ a:hover {
   color: #535bf2;
 }
 
+/* กำหนดค่าเริ่มต้นให้กับ body */
+/* ลบ margin และ display: flex; place-items: center; เพื่อให้สามารถจัด layout ได้อิสระ */
+/* เดิมมี display:flex; place-items: center; */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
